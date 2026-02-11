@@ -12,12 +12,21 @@ const finalText = document.getElementById("final-text");
 // Click Envelope
 
 envelope.addEventListener("click", () => {
-    envelope.style.display = "none";
+    // Add opening animation class
+    envelope.classList.add("opening");
+
+    // Show letter container
     letter.style.display = "flex";
 
+    // After animation completes, hide envelope
+    setTimeout(() => {
+        envelope.style.display = "none";
+    }, 800);
+
+    // Open letter window
     setTimeout( () => {
         document.querySelector(".letter-window").classList.add("open");
-    },50);
+    }, 400);
 });
 
 // Logic to move the NO btn
@@ -57,6 +66,39 @@ noBtn.addEventListener("mouseover", () => {
 //     }
 // });
 
+// Function to create confetti
+function createConfetti() {
+    const confettiCount = 50;
+    const colors = ['#ff69b4', '#ff1493', '#ff69b4', '#ffb6c1', '#ff85c0'];
+    const shapes = ['❤', '💕', '💖', '✨', '💝'];
+
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+
+        // Position and styling
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.fontSize = (Math.random() * 20 + 15) + 'px';
+
+        // Animation properties
+        const duration = (Math.random() * 3 + 2);
+        const drift = (Math.random() - 0.5) * 100; // Random horizontal drift
+        confetti.style.setProperty('--drift', drift + 'px');
+        confetti.style.animationDuration = duration + 's';
+        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+        confetti.style.animation = 'fall linear forwards';
+
+        document.body.appendChild(confetti);
+
+        // Remove confetti after animation
+        setTimeout(() => {
+            confetti.remove();
+        }, (duration + 0.5) * 1000);
+    }
+}
+
 // YES is clicked
 
 yesBtn.addEventListener("click", () => {
@@ -69,4 +111,7 @@ yesBtn.addEventListener("click", () => {
     buttons.style.display = "none";
 
     finalText.style.display = "block";
+
+    // Trigger confetti
+    createConfetti();
 });
